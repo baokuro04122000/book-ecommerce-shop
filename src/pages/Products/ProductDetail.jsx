@@ -16,13 +16,13 @@ const ProductDetail = () => {
   );
 
   const dispatch = useAppDispatch();
-	const navigate = useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(actionGetProductDetails(params.split("=")[1]));
     return () => {
       dispatch(setProductDetail(null));
     };
-  }, [dispatch]);
+  }, [dispatch, params]);
 
   return (
     <>
@@ -30,7 +30,12 @@ const ProductDetail = () => {
         <div class="row">
           <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <div class="tg-postbook">
-              <figure class="tg-featureimg">
+              <figure
+                class="tg-featureimg"
+                style={{
+                  minHeight: "365px",
+                }}
+              >
                 <img
                   src={productDetail?.productPictures[0]}
                   alt="image description"
@@ -105,11 +110,18 @@ const ProductDetail = () => {
               </div>
               <span class="tg-bookwriter">
                 By:{" "}
-                <a href="javascript:void(0);">{productDetail?.specs?.author}</a>
+                <a href="javascript:void(0);" onClick={() => {
+                  navigate('/products/author='+ productDetail?.specs?.author)
+                }}>{productDetail?.specs?.author}</a>
               </span>
               <span class="tg-bookwriter">
                 Seller:{" "}
-                <a href="javascript:void(0);">
+                <a
+                  href="javascript:void(0);"
+                  onClick={() => {
+                    navigate("/products/sellers=" + productDetail?.seller?._id);
+                  }}
+                >
                   {productDetail?.seller?.info?.name}
                 </a>
               </span>
@@ -190,7 +202,7 @@ const ProductDetail = () => {
                 </li>
                 <li>
                   <span>Other Fomate:</span>
-                  <span>CD-Audio, Paperback, E-Book</span>
+                  <span>Paperback, E-Book</span>
                 </li>
               </ul>
               <div class="tg-alsoavailable">
@@ -247,7 +259,10 @@ const ProductDetail = () => {
                 <h2>About Seller</h2>
               </div>
               <div class="tg-authorbox">
-                <figure class="tg-authorimg">
+                <figure class="tg-authorimg" style={{
+                      maxHeight: '250px',
+                      maxWidth: '158px'
+                }}>
                   <img
                     src={productDetail?.seller?.logo}
                     alt="image description"
@@ -299,7 +314,7 @@ const ProductDetail = () => {
                     href="javascript:void(0);"
                     onClick={() => {
                       navigate(
-                        `/products/seller=${productDetail?.seller?._id}`
+                        `/products/sellers=${productDetail?.seller?._id}`
                       );
                     }}
                   >
@@ -315,12 +330,22 @@ const ProductDetail = () => {
                 <h2>
                   <span>Related Products</span>You May Also Like
                 </h2>
-                <a class="tg-btn" href="javascript:void(0);">
+                <a
+                  class="tg-btn"
+                  href="javascript:void(0);"
+                  onClick={() => {
+                    navigate(
+                      "/products/category=" + productDetail?.category?._id
+                    );
+                  }}
+                >
                   View All
                 </a>
               </div>
             </div>
-            <RelatedProducts />
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <RelatedProducts categoryId={productDetail?.category?._id} />
+            </div>
           </div>
         </div>
       </div>

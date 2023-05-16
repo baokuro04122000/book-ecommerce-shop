@@ -1,4 +1,5 @@
 import Product from './Product'
+import Section from '../../../components/Section/Section';
 
 const BestSelling = () => {
 	
@@ -14,9 +15,9 @@ const BestSelling = () => {
 							</div>
 						</div>
 						<div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						
+						<Section>
 							<Product/>
-							
+      			</Section>
 						</div>
 					</div>
 				</div>

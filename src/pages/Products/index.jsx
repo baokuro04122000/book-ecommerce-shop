@@ -3,6 +3,7 @@ import Products from './Products'
 import Search from './SideBar/Search'
 import Categories from "./SideBar/Categories";
 import {Outlet} from 'react-router-dom'
+import Sellers from "./SideBar/Sellers";
 const ProductsPage = () => {
   return (
     <>
@@ -19,6 +20,7 @@ const ProductsPage = () => {
                 <aside id="tg-sidebar" class="tg-sidebar">
                   <Search/>
                   <Categories/>
+                  <Sellers/>
                 </aside>
               </div>
             </div>

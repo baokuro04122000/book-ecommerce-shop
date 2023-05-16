@@ -28,3 +28,23 @@ export const getProducts =async (query) => {
 export const getProductDetailsBySlug = async (slug) => {
   return await baseAxios.get('/product/'+slug)
 }
+
+export const searchProducts =async (keyword) => {
+  return await baseAxios.get('/product/search/'+keyword)
+}
+
+export const getSellers = async () => {
+  return await baseAxios.get('/sellers');
+}
+
+export const getRelatedProduct = async (categoryId) => {
+  return await baseAxios.get('/product/related-product/get?categoryId='+categoryId)
+}
+
+export const getSellersTop3 = async () => {
+  return await baseAxios.get('/sellers/top3')
+}
+
+export const getProductsByAuthor = async (query) => {
+  return await baseAxios.get('/product/author/get?'+ query)
+}

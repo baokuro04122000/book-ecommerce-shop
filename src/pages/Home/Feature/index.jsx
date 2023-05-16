@@ -3,10 +3,12 @@ import { useAppDispatch, useAppSelector } from "../../../store";
 import { actionGetFeaturedProduct } from "../../../store/products/action";
 import { setFeaturedProduct } from "../../../store/products/slice";
 import { calDiscount } from "../../../helpers/utils";
+import { useNavigate } from "react-router-dom";
 const Feature = () => {
   const featured = useAppSelector(({ products }) => products.featuredProduct);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(actionGetFeaturedProduct());
     return () => {
@@ -18,7 +20,15 @@ const Feature = () => {
       <div className="container">
         <div className="row">
           <div className="tg-featureditm">
-            <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4 hidden-sm hidden-xs">
+            <div
+              className="col-xs-12 col-sm-12 col-md-4 col-lg-4 hidden-sm hidden-xs"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "352px",
+              }}
+            >
               <figure>
                 <img
                   src={featured?.productPictures[0]}
@@ -37,7 +47,26 @@ const Feature = () => {
                   </h3>
                 </div>
                 <span className="tg-bookwriter">
-                  By: <a href="javascript:void(0);">{featured?.specs.author}</a>
+                  By:{" "}
+                  <a
+                    href="javascript:void(0);"
+                    onClick={() => {
+                      navigate("/products/author=" + featured?.specs.author);
+                    }}
+                  >
+                    {featured?.specs.author}
+                  </a>
+                </span>
+                <span className="tg-bookwriter">
+                  Seller:{" "}
+                  <a
+                    href="javascript:void(0);"
+                    onClick={() => {
+                      navigate("/products/sellers=" + featured?.sellerId._id);
+                    }}
+                  >
+                    {featured?.sellerId.info.name}
+                  </a>
                 </span>
                 <span className="tg-stars">
                   <span></span>

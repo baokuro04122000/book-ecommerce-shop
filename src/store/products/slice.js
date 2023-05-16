@@ -1,13 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  bestSelling: null,
+  bestSelling: [],
   categories: null,
   categoriesAmount: null,
   featuredProduct: null,
   newReleaseBook: null,
   products: null,
   productDetail: null,
+  searchList:null,
+  sellers: [],
 };
 
 export const productsSlice = createSlice({
@@ -34,6 +36,12 @@ export const productsSlice = createSlice({
     },
     setProductDetail(state, action){
       state.productDetail = action.payload
+    },
+    setSearchList(state, action){
+      state.searchList = action.payload
+    },
+    setSellers(state, action){
+      state.sellers = action.payload
     }
   },
 });
@@ -45,7 +53,9 @@ export const {
   setCategoriesAmount,
   setNewReleaseBook,
   setProducts,
-  setProductDetail
+  setProductDetail,
+  setSearchList,
+  setSellers
 } = productsSlice.actions;
 
 export default productsSlice.reducer;

@@ -44,6 +44,7 @@ const Categories = () => {
               <a href="javascript:void(0);" onClick={async() => {
                   await dispatch(actionGetProducts('page=1&limit=8'))
                   setOnCategory('')
+                  navigate('/products/all')
                 }}>
                 <span>View All</span>
               </a>

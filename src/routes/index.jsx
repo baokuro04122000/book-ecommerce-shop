@@ -4,25 +4,20 @@ import UnauthRoute from './UnauthRoute'
 import Layout from '../layout/Layout'
 import Home from '../pages/Home'
 import PermissionRoute from './PermissionRoute'
-import ProductsPage from '../pages/Products';
 import Products from '../pages/Products/Products';
-import ProductDetail from '../pages/Products/ProductDetail';
+import Sellers from '../pages/Sellers'
 const unauthRoutes = {
   path: '/',
   element: <Layout/>,
   guard: <UnauthRoute />,
   children :[
     {
-      path:'login',
-      element: <div>Login</div>
-    },
-    {
-      path: 'sign-up',
-      element:<>sign up</>
-    },
-    {
       path: '/',
       element: <Home />
+    },
+    {
+      path:'/sellers',
+      element: <Sellers/>
     }
 
   ]
