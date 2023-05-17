@@ -9,50 +9,60 @@ import { useParams, useNavigate } from "react-router-dom";
 import { setFeaturedProduct, setProducts } from "../../store/products/slice";
 import ProductDetail from "./ProductDetail";
 import Price from "../../components/Price/Price";
+import { selectIsAuth } from "../../store/authentication/selector";
+import { forceLogin } from "../../helpers/utils";
+import AddCart from "../../components/AddCart";
 const Products = () => {
   const products = useAppSelector(({ products }) => products.products);
 
   const [from, setFrom] = useState(0);
   const [to, setTo] = useState(Infinity);
-  const [filterPrice, setFilterPrice] = useState('')
+  const [filterPrice, setFilterPrice] = useState("");
+  const [filterOrder, setFilterOrder] = useState(null);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { params } = useParams();
   useEffect(() => {
-    switch(params?.split("=")[0]){
+    switch (params?.split("=")[0]) {
       case "category":
         dispatch(
-          actionGetProducts(`page=1&limit=8&categoryId=${params.split("=")[1]}`+filterPrice)
+          actionGetProducts(
+            `page=1&limit=8&categoryId=${params.split("=")[1]}` + filterPrice
+          )
         );
         break;
       case "sellers":
         dispatch(
-          actionGetProducts(`page=1&limit=8&sellerId=${params.split("=")[1]}`+filterPrice)
+          actionGetProducts(
+            `page=1&limit=8&sellerId=${params.split("=")[1]}` + filterPrice
+          )
         );
         break;
       case "author":
         dispatch(
           actionGetProductsByAuthor(
-            `page=1&limit=8&author=${params.split("=")[1]}`+ filterPrice
+            `page=1&limit=8&author=${params.split("=")[1]}` + filterPrice
           )
         );
         break;
       case "search":
         dispatch(
           actionGetProducts(
-            `page=1&limit=8&name=${params.split("=")[1]}&author=${params.split("=")[1]}`+ filterPrice
+            `page=1&limit=8&name=${params.split("=")[1]}&author=${
+              params.split("=")[1]
+            }` + filterPrice
           )
         );
         break;
       default:
-        dispatch(actionGetProducts("page=1&limit=8"+filterPrice));
+        dispatch(actionGetProducts(`page=1&limit=8${filterOrder ? filterOrder : filterPrice}`));
     }
     return () => {
       dispatch(setFeaturedProduct(null));
       dispatch(setProducts(null));
     };
-  }, [dispatch, params, filterPrice]);
+  }, [dispatch, params, filterPrice, filterOrder]);
 
   const pagination = useMemo(() => {
     if (products) {
@@ -65,9 +75,9 @@ const Products = () => {
                   params === "all"
                     ? filterPrice
                     : params.split("=")[0] === "category"
-                    ? `categoryId=${params.split("=")[1]}`+filterPrice
+                    ? `categoryId=${params.split("=")[1]}` + filterPrice
                     : params.split("=")[0] === "sellers"
-                    ? `sellerId=${params.split("=")[1]}`+filterPrice
+                    ? `sellerId=${params.split("=")[1]}` + filterPrice
                     : params
                 }`
               )
@@ -86,8 +96,10 @@ const Products = () => {
   }, [products]);
 
   const hanleSubmit = () => {
-    setFilterPrice(`&price[gte]=${from}&price[lte]=${to}`)
-  }
+    setFilterOrder(null)
+    setFilterPrice(`&price[gte]=${from}&price[lte]=${to}`);
+  };
+
 
   return (
     <div id="tg-content" class="tg-content">
@@ -142,7 +154,6 @@ const Products = () => {
                               method="post"
                               autocomplete="off"
                               class="form-inline col-lg-12 col-xs-12 col-md-12"
-                              
                             >
                               <div class="form-row">
                                 <label
@@ -161,12 +172,11 @@ const Products = () => {
                                     id="inlineFormInputGroupUsername2"
                                     placeholder="From"
                                     onChange={(e) => {
-                                      if(e.target.value){
-                                        setFrom(e.target.value)
-                                      }else{
-                                        setFrom(0)
+                                      if (e.target.value) {
+                                        setFrom(e.target.value);
+                                      } else {
+                                        setFrom(0);
                                       }
-
                                     }}
                                   />
                                 </div>
@@ -177,10 +187,13 @@ const Products = () => {
                                 >
                                   To
                                 </label>
-                                <div class="input-group col-lg-4 col-md-4 col-xs-4" style={{
-                                  marginLeft: '12px',
-                                  marginRight: '20px'
-                                }}>
+                                <div
+                                  class="input-group col-lg-4 col-md-4 col-xs-4"
+                                  style={{
+                                    marginLeft: "12px",
+                                    marginRight: "20px",
+                                  }}
+                                >
                                   <input
                                     type="number"
                                     name="to"
@@ -189,12 +202,11 @@ const Products = () => {
                                     id="inlineFormInputGroupUsername2"
                                     placeholder="To"
                                     onChange={(e) => {
-                                      if(e.target.value){
-                                        setTo(e.target.value)
-                                      }else{
-                                        setTo(Infinity)
+                                      if (e.target.value) {
+                                        setTo(e.target.value);
+                                      } else {
+                                        setTo(Infinity);
                                       }
-
                                     }}
                                   />
                                 </div>
@@ -205,7 +217,6 @@ const Products = () => {
                                   >
                                     Apply
                                   </div>
-
                                 </div>
                               </div>
                             </form>
@@ -217,9 +228,13 @@ const Products = () => {
                   <div className="form-group">
                     <label>sort :</label>
                     <span className="tg-select">
-                      <select>
-                        <option>newest</option>
-                        <option>oldest</option>
+                      <select
+                        onChange={(e) => {
+                          setFilterOrder('&order='+e.target.value)
+                        }}
+                      >
+                        <option value="desc">newest</option>
+                        <option value="asec">oldest</option>
                       </select>
                     </span>
                   </div>
@@ -252,6 +267,13 @@ const Products = () => {
                       <a
                         className="tg-btnaddtowishlist"
                         href="javascript:void(0);"
+                        onClick={() => {
+                          if (selectIsAuth()) {
+                            console.log("handle add with");
+                          } else {
+                            forceLogin();
+                          }
+                        }}
                       >
                         <i className="icon-heart"></i>
                         <span>add to wishlist</span>
@@ -319,13 +341,7 @@ const Products = () => {
                       <span className="tg-bookprice">
                         <Price product={product} />
                       </span>
-                      <a
-                        className="tg-btn tg-btnstyletwo"
-                        href="javascript:void(0);"
-                      >
-                        <i className="fa fa-shopping-basket"></i>
-                        <em>Add To Basket</em>
-                      </a>
+                      <AddCart product={product} />
                     </div>
                   </div>
                 </div>

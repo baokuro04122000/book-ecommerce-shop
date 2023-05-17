@@ -3,6 +3,9 @@ import { getRelatedProduct } from "../../api/products";
 import { useNavigate } from "react-router-dom";
 import Price from "../../components/Price/Price";
 import Carousel from "react-multi-carousel";
+import { selectIsAuth } from "../../store/authentication/selector";
+import { forceLogin } from "../../helpers/utils";
+import AddCart from "../../components/AddCart";
 const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
@@ -51,7 +54,9 @@ const RelatedProducts = ({ categoryId }) => {
             {products?.map((product) => (
               <React.Fragment key={product._id}>
                 <div class="item">
-                  <div class="tg-postbook">
+                  <div class="tg-postbook" style={{
+                minHeight: '566px'
+              }}>
                     <figure class="tg-featureimg">
                       <div class="tg-bookimg">
                         <div class="tg-frontcover">
@@ -67,7 +72,17 @@ const RelatedProducts = ({ categoryId }) => {
                           />
                         </div>
                       </div>
-                      <a class="tg-btnaddtowishlist" href="javascript:void(0);">
+                      <a
+                        class="tg-btnaddtowishlist"
+                        href="javascript:void(0);"
+                        onClick={() => {
+                          if (selectIsAuth()) {
+                            console.log("handle add with");
+                          } else {
+                            forceLogin();
+                          }
+                        }}
+                      >
                         <i class="icon-heart"></i>
                         <span>add to wishlist</span>
                       </a>
@@ -134,13 +149,7 @@ const RelatedProducts = ({ categoryId }) => {
                       <span class="tg-bookprice">
                         <Price product={product} />
                       </span>
-                      <a
-                        class="tg-btn tg-btnstyletwo"
-                        href="javascript:void(0);"
-                      >
-                        <i class="fa fa-shopping-basket"></i>
-                        <em>Add To Basket</em>
-                      </a>
+                      <AddCart product={product}/>
                     </div>
                   </div>
                 </div>

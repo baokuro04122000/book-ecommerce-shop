@@ -8,6 +8,8 @@ import SavePrice from "../../components/Price/SavePrice";
 import InStock from "../../components/Price/InStock";
 import AlsoAvailable from "../../components/Price/AlsoAvailable";
 import RelatedProducts from "./RelatedProduct";
+import { selectIsAuth } from "../../store/authentication/selector";
+import { forceLogin } from "../../helpers/utils";
 const ProductDetail = () => {
   const { params } = useParams();
 
@@ -77,10 +79,27 @@ const ProductDetail = () => {
                 <a
                   class="tg-btn tg-active tg-btn-lg"
                   href="javascript:void(0);"
+                  onClick={() => {
+                    if (selectIsAuth()) {
+                      console.log("handle add with");
+                    } else {
+                      forceLogin();
+                    }
+                  }}
                 >
                   Add To Basket
                 </a>
-                <a class="tg-btnaddtowishlist" href="javascript:void(0);">
+                <a
+                  class="tg-btnaddtowishlist"
+                  href="javascript:void(0);"
+                  onClick={() => {
+                    if (selectIsAuth()) {
+                      console.log("handle add with");
+                    } else {
+                      forceLogin();
+                    }
+                  }}
+                >
                   <span>add to wishlist</span>
                 </a>
               </div>
@@ -110,9 +129,16 @@ const ProductDetail = () => {
               </div>
               <span class="tg-bookwriter">
                 By:{" "}
-                <a href="javascript:void(0);" onClick={() => {
-                  navigate('/products/author='+ productDetail?.specs?.author)
-                }}>{productDetail?.specs?.author}</a>
+                <a
+                  href="javascript:void(0);"
+                  onClick={() => {
+                    navigate(
+                      "/products/author=" + productDetail?.specs?.author
+                    );
+                  }}
+                >
+                  {productDetail?.specs?.author}
+                </a>
               </span>
               <span class="tg-bookwriter">
                 Seller:{" "}
@@ -259,10 +285,13 @@ const ProductDetail = () => {
                 <h2>About Seller</h2>
               </div>
               <div class="tg-authorbox">
-                <figure class="tg-authorimg" style={{
-                      maxHeight: '250px',
-                      maxWidth: '158px'
-                }}>
+                <figure
+                  class="tg-authorimg"
+                  style={{
+                    maxHeight: "250px",
+                    maxWidth: "158px",
+                  }}
+                >
                   <img
                     src={productDetail?.seller?.logo}
                     alt="image description"

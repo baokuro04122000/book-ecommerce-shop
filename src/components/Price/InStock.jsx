@@ -8,7 +8,7 @@ const InStock = ({product}) => {
         (<em>In Stock</em>) :
         status === 'kindle' ?
         (
-          <em>In Stock Kindle</em>
+          <em>In Stock E-Book</em>
         ):
         (
           <em>Out Of Stock</em>

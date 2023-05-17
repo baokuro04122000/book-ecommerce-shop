@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getSellersTop3 } from "../api/products";
+import {scrollTop} from '../helpers/utils'
 const Footer = () => {
   const [sellers, setSellers] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
+    document.querySelector("#tg-btnbacktotop").addEventListener("click", ()=> {window.scrollTo({ top: 0, behavior: 'smooth' });})
     getSellersTop3()
       .then(({ data }) => {
         setSellers(data.data);
@@ -259,6 +261,9 @@ const Footer = () => {
           id="tg-btnbacktotop"
           className="tg-btnbacktotop"
           href="javascript:void(0);"
+          onClick={()=>{
+            scrollTop()
+          }}
         >
           <i className="icon-chevron-up"></i>
         </a>
@@ -266,7 +271,7 @@ const Footer = () => {
           <div className="row">
             <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <span className="tg-paymenttype">
-                <img src="images/paymenticon.png" alt="image description" />
+                <img src="/images/paymenticon.png" alt="image description" />
               </span>
               <span className="tg-copyright">
                 2023 All Rights Reserved By &copy; Book Library - Dinh Bao

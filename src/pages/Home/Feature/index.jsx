@@ -2,8 +2,10 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { actionGetFeaturedProduct } from "../../../store/products/action";
 import { setFeaturedProduct } from "../../../store/products/slice";
-import { calDiscount } from "../../../helpers/utils";
+import { calDiscount, forceLogin } from "../../../helpers/utils";
 import { useNavigate } from "react-router-dom";
+import { selectIsAuth } from "../../../store/authentication/selector";
+import AddCart from "../../../components/AddCart";
 const Feature = () => {
   const featured = useAppSelector(({ products }) => products.featuredProduct);
 
@@ -43,7 +45,14 @@ const Feature = () => {
                 </div>
                 <div className="tg-booktitle">
                   <h3>
-                    <a href="javascript:void(0);">{featured?.name}</a>
+                    <a
+                      href="javascript:void(0);"
+                      onClick={() => {
+                        navigate("/products/detail=" + featured?.slug);
+                      }}
+                    >
+                      {featured?.name}
+                    </a>
                   </h3>
                 </div>
                 <span className="tg-bookwriter">
@@ -129,13 +138,7 @@ const Feature = () => {
                       </>
                     )}
                   </span>
-                  <a
-                    className="tg-btn tg-btnstyletwo tg-active"
-                    href="javascript:void(0);"
-                  >
-                    <i className="fa fa-shopping-basket"></i>
-                    <em>Add To Basket</em>
-                  </a>
+                  <AddCart product={featured}/>
                 </div>
               </div>
             </div>

@@ -14,6 +14,8 @@ jQuery(document).on('ready', function() {
 		var _scrollUp = jQuery('html, body');
 		_scrollUp.animate({ scrollTop: 0 }, 'slow');
 	})
+
+	
 	/* -------------------------------------
 			COLLAPSE MENU SMALL DEVICES
 	-------------------------------------- */

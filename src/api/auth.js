@@ -7,3 +7,11 @@ export const googleLogin = async (body) => {
 export const login = async (body) => {
   return await baseAxios.post('/auth/login', body)
 }
+
+export const logout = async (body) => {
+  return await baseAxios.post('/auth/logout', body)
+}
+
+export const registerSeller = async () => {
+  return await baseAxios.get('/auth/seller/register')
+}

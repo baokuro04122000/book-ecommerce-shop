@@ -61,7 +61,7 @@ const AlsoAvailable = ({ product }) => {
             <>
               <li>
                 <span>
-                  Kindle $
+                  E-Book $
                   {calDiscount(
                     product?.variants?.find(
                       (variant) => variant.type === "kindle"
@@ -76,7 +76,7 @@ const AlsoAvailable = ({ product }) => {
           ) : (
             <li>
               <span>
-                Kindle $
+                E-Book $
                 {
                   product?.variants?.find(
                     (variant) => variant.type === "kindle"

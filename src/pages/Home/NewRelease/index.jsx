@@ -3,6 +3,8 @@ import { useAppDispatch, useAppSelector } from "../../../store";
 import { setNewReleaseBook } from "../../../store/products/slice";
 import { actionGetNewReleaseBook } from "../../../store/products/action";
 import { useNavigate } from "react-router-dom";
+import { selectIsAuth } from "../../../store/authentication/selector";
+import { forceLogin } from "../../../helpers/utils";
 const NewRelease = () => {
   const newRelease = useAppSelector(({ products }) => products.newReleaseBook);
 
@@ -79,6 +81,13 @@ const NewRelease = () => {
                             <a
                               className="tg-btnaddtowishlist"
                               href="javascript:void(0);"
+                              onClick={() => {
+                                if (selectIsAuth()) {
+                                  console.log("handle add with");
+                                } else {
+                                  forceLogin();
+                                }
+                              }}
                             >
                               <i className="icon-heart"></i>
                               <span>add to wishlist</span>
@@ -87,14 +96,31 @@ const NewRelease = () => {
                           <div className="tg-postbookcontent">
                             <ul className="tg-bookscategories">
                               <li>
-                                <a href="javascript:void(0);">
+                                <a
+                                  href="javascript:void(0);"
+                                  onClick={() => {
+                                    navigate(
+                                      "/products/category=" +
+                                        product?.category?._id
+                                    );
+                                  }}
+                                >
                                   {product.category.name}
                                 </a>
                               </li>
                             </ul>
                             <div className="tg-booktitle">
                               <h3>
-                                <a href="javascript:void(0);">{product.name}</a>
+                                <a
+                                  href="javascript:void(0);"
+                                  onClick={() => {
+                                    navigate(
+                                      "/products/detail=" + product?.slug
+                                    );
+                                  }}
+                                >
+                                  {product.name}
+                                </a>
                               </h3>
                             </div>
                             <span className="tg-bookwriter">

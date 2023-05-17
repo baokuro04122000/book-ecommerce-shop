@@ -1,11 +1,13 @@
 import { useAppSelector, useAppDispatch } from "../../../store/index";
-import { calDiscount } from "../../../helpers/utils";
+import { calDiscount, forceLogin } from "../../../helpers/utils";
 import { useEffect } from "react";
 import { actionGetBestSelling } from "../../../store/products/action";
 import { setBestSelling } from "../../../store/products/slice";
 import Price from "../../../components/Price/Price";
 import Carousel from "react-multi-carousel";
 import { useNavigate, useParams } from "react-router-dom";
+import { selectIsAuth } from "../../../store/authentication/selector";
+import AddCart from "../../../components/AddCart";
 export const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
@@ -47,7 +49,9 @@ const Product = () => {
         >
           {bestSelling?.map((product) => (
             <div className="item">
-              <div className="tg-postbook">
+              <div className="tg-postbook" style={{
+                minHeight: '566px'
+              }}>
                 <figure className="tg-featureimg">
                   <div className="tg-bookimg">
                     <div className="tg-frontcover">
@@ -63,7 +67,17 @@ const Product = () => {
                       />
                     </div>
                   </div>
-                  <a className="tg-btnaddtowishlist" href="javascript:void(0);">
+                  <a
+                    className="tg-btnaddtowishlist"
+                    href="javascript:void(0);"
+                    onClick={() => {
+                      if (selectIsAuth()) {
+                        console.log("handle add with");
+                      } else {
+                        forceLogin();
+                      }
+                    }}
+                  >
                     <i className="icon-heart"></i>
                     <span>add to wishlist</span>
                   </a>
@@ -126,13 +140,7 @@ const Product = () => {
                   <span className="tg-bookprice">
                     <Price product={product} />
                   </span>
-                  <a
-                    className="tg-btn tg-btnstyletwo"
-                    href="javascript:void(0);"
-                  >
-                    <i className="fa fa-shopping-basket"></i>
-                    <em>Add To Basket</em>
-                  </a>
+                  <AddCart product={product}/>
                 </div>
               </div>
             </div>

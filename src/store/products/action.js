@@ -87,6 +87,7 @@ export const actionGetNewReleaseBook = (query) => {
 export const actionGetProducts = (query) => {
   return async (dispatch) => {
     try {
+      console.log('check::', query)
       const { data } = await getProducts(query);
       await dispatch(setProducts({
         products: data.data,
