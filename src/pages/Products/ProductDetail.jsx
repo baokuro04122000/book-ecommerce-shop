@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { actionGetProductDetails } from "../../store/products/action";
 import { setProductDetail } from "../../store/products/slice";
@@ -9,7 +9,9 @@ import InStock from "../../components/Price/InStock";
 import AlsoAvailable from "../../components/Price/AlsoAvailable";
 import RelatedProducts from "./RelatedProduct";
 import { selectIsAuth } from "../../store/authentication/selector";
-import { forceLogin } from "../../helpers/utils";
+import { calDiscount, forceLogin } from "../../helpers/utils";
+import { toast } from "react-toastify";
+import { actionAddToCart, actionGetCart } from "../../store/cart/action";
 const ProductDetail = () => {
   const { params } = useParams();
 
@@ -19,13 +21,51 @@ const ProductDetail = () => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const [quantity, setQuantity] = useState(1);
+  const [variant, setVariant] = useState(null);
   useEffect(() => {
     dispatch(actionGetProductDetails(params.split("=")[1]));
     return () => {
-      dispatch(setProductDetail(null));
+      dispatch(setProductDetail(null))
     };
   }, [dispatch, params]);
 
+  const handleAddToCart = () => {
+    if (productDetail?.variants?.length === 1) {
+      actionAddToCart({
+        product: productDetail._id,
+        quantity: quantity,
+        variant: productDetail.variants[0]._id,
+        wishlist: false,
+      })
+        .then((message) => {
+          dispatch(actionGetCart());
+          toast.success(message, { autoClose: 3000 });
+        })
+        .catch((err) => {
+          toast.error(err?.errors?.message, { autoClose: 5000 });
+        });
+    } else {
+      if (variant) {
+        actionAddToCart({
+          product: productDetail._id,
+          quantity: quantity,
+          variant: variant,
+          wishlist: false,
+        })
+          .then((message) => {
+            dispatch(actionGetCart());
+            toast.success(message, { autoClose: 3000 });
+          })
+          .catch((err) => {
+            toast.error(err?.errors?.message, { autoClose: 5000 });
+          });
+      }else{
+        toast.warning('Please choose the variant that you wanna buy!')
+      }
+    }
+  };
   return (
     <>
       <div class="tg-productdetail">
@@ -66,22 +106,148 @@ const ProductDetail = () => {
                   </li>
                 </ul>
                 <div class="tg-quantityholder">
-                  <em class="minus">-</em>
+                  <em
+                    class="minus"
+                    onClick={() => {
+                      if (quantity > 1) setQuantity((pre) => pre - 1);
+                    }}
+                  >
+                    -
+                  </em>
                   <input
                     type="text"
+                    disabled={true}
                     class="result"
-                    value="0"
+                    value={quantity}
                     id="quantity1"
                     name="quantity"
                   />
-                  <em class="plus">+</em>
+                  <em
+                    class="plus"
+                    onClick={() => {
+                      if (quantity < 10) setQuantity((pre) => pre + 1);
+                    }}
+                  >
+                    +
+                  </em>
+                </div>
+                <div
+                  class="col-lg-12"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    margin: "11px 0px",
+                  }}
+                >
+                  {productDetail?.variants?.length === 2 ? (
+                    <>
+                      <label
+                        class="radio-inline"
+                        style={{
+                          paddingLeft: "10px",
+                        }}
+                      >
+                        <input
+                          style={{
+                            marginTop: "8px",
+                          }}
+                          type="radio"
+                          name="inlineRadioOptions"
+                          id="inlineRadio2"
+                          onChange={(e) => {
+                            if (e.target.value) {
+                              setVariant(e.target.value);
+                            }
+                          }}
+                          value={
+                            productDetail?.variants?.find(
+                              (variant) => variant.type === "paperBack"
+                            )._id
+                          }
+                          disabled={
+                            productDetail?.variants?.find(
+                              (variant) => variant.type === "paperBack"
+                            ).quantity <= 0
+                              ? true
+                              : false
+                          }
+                        />{" "}
+                        HardBook: $
+                        {calDiscount(
+                          productDetail?.variants?.find(
+                            (variant) => variant.type === "paperBack"
+                          ).price,
+                          productDetail?.variants?.find(
+                            (variant) => variant.type === "paperBack"
+                          ).discount
+                        )}{" "}
+                        {productDetail?.variants?.find(
+                          (variant) => variant.type === "paperBack"
+                        ).quantity <= 0 ? (
+                          <mark>out of stock</mark>
+                        ) : (
+                          <></>
+                        )}
+                      </label>
+                      <label
+                        class="radio-inline"
+                        style={{
+                          paddingLeft: 0,
+                        }}
+                      >
+                        <input
+                          style={{
+                            marginTop: "8px",
+                          }}
+                          onChange={(e) => {
+                            if (e.target.value) {
+                              setVariant(e.target.value);
+                            }
+                          }}
+                          type="radio"
+                          name="inlineRadioOptions"
+                          id="inlineRadio2"
+                          value={
+                            productDetail?.variants?.find(
+                              (variant) => variant.type === "kindle"
+                            )._id
+                          }
+                          disabled={
+                            productDetail?.variants?.find(
+                              (variant) => variant.type === "kindle"
+                            ).quantity <= 0
+                              ? true
+                              : false
+                          }
+                        />{" "}
+                        E-Book: $
+                        {calDiscount(
+                          productDetail?.variants?.find(
+                            (variant) => variant.type === "kindle"
+                          ).price,
+                          productDetail?.variants?.find(
+                            (variant) => variant.type === "kindle"
+                          ).discount
+                        )}{" "}
+                        {productDetail?.variants?.find(
+                          (variant) => variant.type === "kindle"
+                        ).quantity <= 0 ? (
+                          <mark>out of stock</mark>
+                        ) : (
+                          <></>
+                        )}
+                      </label>
+                    </>
+                  ) : (
+                    <></>
+                  )}
                 </div>
                 <a
                   class="tg-btn tg-active tg-btn-lg"
                   href="javascript:void(0);"
                   onClick={() => {
                     if (selectIsAuth()) {
-                      console.log("handle add with");
+                      handleAddToCart();
                     } else {
                       forceLogin();
                     }
@@ -89,6 +255,7 @@ const ProductDetail = () => {
                 >
                   Add To Basket
                 </a>
+
                 <a
                   class="tg-btnaddtowishlist"
                   href="javascript:void(0);"

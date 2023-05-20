@@ -14,10 +14,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { actionGetCart } from "../store/cart/action";
 const Header = () => {
   const categories = useAppSelector(({ products }) => products.categories);
   const user = getUser();
   const [flag, setFlag] = useState(false);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   useEffect(() => {
@@ -34,6 +36,7 @@ const Header = () => {
     values.preventDefault();
     try {
       await dispatch(actionLogin({ email, password }));
+      dispatch(actionGetCart())
       setFlag((pre) => !pre);
     } catch (error) {
       console.log("error", error);
@@ -41,7 +44,6 @@ const Header = () => {
         toast.error(error?.message.toString(), {autoClose: 5000})
       }else{
         toast.error(error?.errors.message, {autoClose: 5000})
-
       }
       setFlag((pre) => !pre);
     }
@@ -50,6 +52,8 @@ const Header = () => {
   const googleLogin = useGoogleLogin({
     onSuccess: async (res) => {
       await dispatch(actionGoogleLogin({ accessToken: res.access_token }));
+      dispatch(actionGetCart())
+      setFlag((pre) => !pre);
     },
     onError: (errorResponse) => {
       console.log(errorResponse);
@@ -63,7 +67,9 @@ const Header = () => {
         refreshToken: user.refreshToken,
       });
       setFlag((pre) => !pre);
+      dispatch(actionGetCart())
       toast.success('Logout successfully', {autoClose: 3000})
+      console.log('login', selectIsAuth())
     } catch (error) {
       console.log("err::", error);
       localStorage.clear("authUser");
@@ -342,7 +348,7 @@ const Header = () => {
         </div>
       </div>
       {/* middle container */}
-      <MiddleContainer />
+      <MiddleContainer  />
       <div className="tg-navigationarea">
         <div className="container">
           <div className="row">

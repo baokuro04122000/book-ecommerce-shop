@@ -196,11 +196,11 @@ const Footer = () => {
                               <a
                                 href="javascript:void(0);"
                                 onClick={() => {
-                                  navigate("/products/sellers=" + seller._id);
+                                  navigate("/products/sellers=" + seller?._id);
                                 }}
                               >
                                 <img
-                                  src={seller.logo}
+                                  src={seller?.logo}
                                   alt="image description"
                                 />
                               </a>
@@ -210,13 +210,13 @@ const Footer = () => {
                                 <a
                                   href="javascript:void(0);"
                                   onClick={() => {
-                                    navigate("/products/sellers=" + seller._id);
+                                    navigate("/products/sellers=" + seller?._id);
                                   }}
                                 >
-                                  {seller.info.name}
+                                  {seller?.info?.name}
                                 </a>
                               </h4>
-                              <p>{seller.totalProduct} Books</p>
+                              <p>{seller?.totalProduct} Books</p>
                             </div>
                           </li>
                         </>

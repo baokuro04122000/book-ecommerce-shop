@@ -1,8 +1,26 @@
 import { calDiscount, forceLogin } from "../../helpers/utils";
 import { selectIsAuth } from "../../store/authentication/selector";
 import { useState } from "react";
+import { useAppDispatch } from '../../store'
+import {toast} from 'react-toastify'
+import { actionAddToCart, actionGetCart } from "../../store/cart/action";
 const AddCart = ({product}) => {
   const [toggle, setToggle] = useState(true)
+
+  const dispatch = useAppDispatch();
+  const handleAddToCart = (variantId, productId) => {
+    actionAddToCart({
+      product: productId,
+      variant: variantId,
+      quantity: 1,
+      wishlist: false
+    }).then(message => {
+      dispatch(actionGetCart())
+      toast.success(message, {autoClose: 3000})
+    }).catch(err => {
+      toast.error(err.errors.message, {autoClose: 5000})
+    })
+  }
   return (
     <>
      <li
@@ -49,7 +67,12 @@ const AddCart = ({product}) => {
               type="radio"
               name="inlineRadioOptions"
               id="inlineRadio1"
-              value={product?.variants[0].type}
+              onChange={(e) => {
+                if(e.target.value){
+                  handleAddToCart(e.target.value,product._id)
+                }
+              }}
+              value={product?.variants[0]._id}
               disabled={product?.variants[0].quantity <= 0 ? true : false}
             />{" "}
             {product?.variants[0].type === 'kindle' ? 'E-Book' : 'HardBook'}: ${calDiscount(product?.variants[0].price,product?.variants[0].discount)}
@@ -68,7 +91,12 @@ const AddCart = ({product}) => {
               type="radio"
               name="inlineRadioOptions"
               id="inlineRadio2"
-              value="paperBack"
+              onChange={(e) => {
+                if(e.target.value){
+                  handleAddToCart(e.target.value,product._id)
+                }
+              }}
+              value={product?.variants?.find((variant) => variant.type === "paperBack")._id}
               disabled={product?.variants?.find((variant) => variant.type === "paperBack").quantity <= 0 ? true : false}
             />{" "}
             HardBook: ${calDiscount(product?.variants?.find((variant) => variant.type === "paperBack").price, product?.variants?.find((variant) => variant.type === "paperBack").discount)}
@@ -84,13 +112,18 @@ const AddCart = ({product}) => {
               style={{
                 marginTop: "8px",
               }}
+              onChange={(e) => {
+                if(e.target.value){
+                  handleAddToCart(e.target.value,product._id)
+                }
+              }}
               type="radio"
               name="inlineRadioOptions"
               id="inlineRadio2"
-              value="kindle"
+              value={product?.variants?.find((variant) => variant.type === "kindle")._id}
               disabled={product?.variants?.find((variant) => variant.type === "kindle").quantity <= 0 ? true : false}
             />{" "}
-            HardBook: ${calDiscount(product?.variants?.find((variant) => variant.type === "kindle").price, product?.variants?.find((variant) => variant.type === "kindle").discount)}
+            E-Book: ${calDiscount(product?.variants?.find((variant) => variant.type === "kindle").price, product?.variants?.find((variant) => variant.type === "kindle").discount)}
             {" "} {product?.variants?.find((variant) => variant.type === "kindle").quantity <= 0 ? <mark>out of stock</mark> : <></>}
           </label>
             </>

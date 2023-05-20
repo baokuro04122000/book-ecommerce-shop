@@ -1,6 +1,6 @@
 import {toast} from 'react-toastify'
 export const calDiscount = (price, discount) => {
-  return (price - (price * discount) / 100).toFixed(2);
+  return Number((price - (price * discount) / 100).toFixed(2));
 };
 
 export const inStock = (product) => {
@@ -28,4 +28,18 @@ export const forceLogin = () => {
 }
 export const scrollTop = () => {
   window.screenTop = 0;
+}
+
+export const subtotal = (cartItems) => {
+  let result = 0;
+  cartItems?.forEach((item) => {
+    const variant = item.product.variants.find(v => v._id === item.variant)
+    result += calDiscount(variant.price, variant.discount)*item.quantity
+  })
+  return Number(result.toFixed(2));
+}
+
+export const calPriceItemCart = (cartItem) => {
+  const variant = cartItem?.product.variants.find(v => v._id === cartItem.variant)
+  return Number((calDiscount(variant.price, variant.discount)*cartItem.quantity).toFixed(2))
 }

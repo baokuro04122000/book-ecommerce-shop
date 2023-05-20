@@ -6,6 +6,8 @@ import Home from '../pages/Home'
 import PermissionRoute from './PermissionRoute'
 import Products from '../pages/Products/Products';
 import Sellers from '../pages/Sellers'
+import AuthRoute from './AuthRoute';
+import Checkout from '../pages/Checkout';
 const unauthRoutes = {
   path: '/',
   element: <Layout/>,
@@ -20,6 +22,18 @@ const unauthRoutes = {
       element: <Sellers/>
     }
 
+  ]
+};
+
+const checkoutRoutes = {
+  path: '/checkout',
+  element: <Layout/>,
+  guard: <AuthRoute />,
+  children :[
+    {
+      path: 'process',
+      element: <Checkout />
+    }
   ]
 };
 
@@ -41,7 +55,7 @@ const notfoundRoute = {
   element: <>Page not found</>,
 };
 
-const routes = [unauthRoutes,unauthRoutesProducs, notfoundRoute];
+const routes = [unauthRoutes,unauthRoutesProducs, checkoutRoutes, notfoundRoute];
 
 
 const Routes = () => {
