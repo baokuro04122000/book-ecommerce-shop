@@ -8,6 +8,10 @@ import Products from '../pages/Products/Products';
 import Sellers from '../pages/Sellers'
 import AuthRoute from './AuthRoute';
 import Checkout from '../pages/Checkout';
+import Order from '../pages/Order';
+import Packed from '../pages/Order/Packed';
+import Ordered from '../pages/Order/Ordered';
+import Cancelled from '../pages/Order/Cancelled';
 const unauthRoutes = {
   path: '/',
   element: <Layout/>,
@@ -33,7 +37,23 @@ const checkoutRoutes = {
     {
       path: 'process',
       element: <Checkout />
-    }
+    },
+    {
+      path: 'orders',
+      element: <Order />
+    },
+    {
+      path: 'packed',
+      element: <Packed />
+    },
+    {
+      path: 'ordered',
+      element: <Ordered />
+    },
+    {
+      path: 'cancelled',
+      element: <Cancelled />
+    },
   ]
 };
 

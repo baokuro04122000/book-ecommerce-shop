@@ -27,3 +27,19 @@ export const addOrder = async (body) => {
 export const checkStatusPayment = async (payId) => {
   return await baseAxios.post('/pay/check-status', {payId})
 }
+
+export const getAllOrders = async () => {
+  return await baseAxios.get('/order/all')
+}
+
+export const getAllOrdersPacked = async () => {
+  return await baseAxios.get('/order/all-packed')
+}
+
+export const getAllOrderedByUser = async () => {
+  return await baseAxios.get('/order/all-ordered')
+}
+
+export const getAllOrderCancelled = async () => {
+  return await baseAxios.get('/order/all-cancelled')
+}

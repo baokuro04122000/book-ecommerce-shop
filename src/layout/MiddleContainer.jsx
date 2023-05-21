@@ -24,12 +24,12 @@ const MiddleContainer = () => {
   const [saveQuantity, setSaveQuantity] = useState({});
   const [savePrice, setSavePrice] = useState({});
   const [open, setOpen] = useState(false);
-  const [saveCartItemSelected, setSaveCartItemSelected ] =useState([])
+  const [saveCartItemSelected, setSaveCartItemSelected] = useState([]);
   useEffect(() => {
     dispatch(actionGetCart());
     return () => {
       dispatch(setCarts(null));
-      handleUpdateCartItem()
+      handleUpdateCartItem();
     };
   }, [dispatch]);
 
@@ -41,7 +41,7 @@ const MiddleContainer = () => {
   };
 
   const handleDeleteItemCart = (cartItem) => {
-    handleUpdateCartItem()
+    handleUpdateCartItem();
     actionDeleteItemCart({
       productId: cartItem?.product._id,
       variantId: cartItem.variant,
@@ -56,7 +56,7 @@ const MiddleContainer = () => {
   };
 
   const handleDeleteAllCarts = () => {
-    handleUpdateCartItem()
+    handleUpdateCartItem();
     actionDeleteAllCarts()
       .then((message) => {
         dispatch(actionGetCart());
@@ -159,30 +159,34 @@ const MiddleContainer = () => {
     }
   };
 
-  const handleUpdateCartItem =async () => {
-    if(Object.keys(saveQuantity).length){
-      try{
-        await Promise.all(Object.entries(saveQuantity).map((item) => {
-          return addToCart({
-            product: item[1].product,
-            variant: item[1].variant,
-            quantity: item[1].quantity,
-            wishlist: false
+  const handleUpdateCartItem = async () => {
+    if (Object.keys(saveQuantity).length) {
+      try {
+        await Promise.all(
+          Object.entries(saveQuantity).map((item) => {
+            return addToCart({
+              product: item[1].product,
+              variant: item[1].variant,
+              quantity: item[1].quantity,
+              wishlist: false,
+            });
           })
-        }))
-        setSaveQuantity({})
-        dispatch(actionGetCart())
-      }catch(err){
-        console.log(err)
+        );
+        setSaveQuantity({});
+        dispatch(actionGetCart());
+      } catch (err) {
+        console.log(err);
       }
-      
     }
-  }
+  };
 
   const handleCheckOut = () => {
-    localStorage.setItem('orderList', JSON.stringify(saveCartItemSelected.toString()))
-    navigate('/checkout/process')
-  }
+    localStorage.setItem(
+      "orderList",
+      JSON.stringify(saveCartItemSelected.toString())
+    );
+    navigate("/checkout/process");
+  };
   return (
     <div className="tg-middlecontainer">
       <div className="container">
@@ -202,7 +206,6 @@ const MiddleContainer = () => {
                   data-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false"
-                 
                 >
                   <span className="tg-themebadge">3</span>
                   <i className="icon-heart"></i>
@@ -229,7 +232,7 @@ const MiddleContainer = () => {
                   aria-haspopup="true"
                   aria-expanded="false"
                   onClick={() => {
-                    handleUpdateCartItem()
+                    handleUpdateCartItem();
                     setOpen((pre) => !pre);
                   }}
                 >
@@ -258,16 +261,23 @@ const MiddleContainer = () => {
                       <>
                         <div className="tg-minicarproduct row">
                           <div className="col-lg-1 col-md-1 col-sx-1">
-                            <input type="checkbox" value={cartItem?._id} onChange={(e) => {
-                              if(e.target.checked){
-                                setSaveCartItemSelected(pre => {
-                                  pre.push(e.target.value)
-                                  return pre
-                                })
-                              }else{
-                                setSaveCartItemSelected(pre => pre.filter(val => val !== e.target.value))
-                              }
-                            }} aria-label="..." />
+                            <input
+                              type="checkbox"
+                              value={cartItem?._id}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setSaveCartItemSelected((pre) => {
+                                    pre.push(e.target.value);
+                                    return pre;
+                                  });
+                                } else {
+                                  setSaveCartItemSelected((pre) =>
+                                    pre.filter((val) => val !== e.target.value)
+                                  );
+                                }
+                              }}
+                              aria-label="..."
+                            />
                           </div>
                           <figure
                             class="col-lg-3 col-md-3 col-xs-3"
@@ -369,8 +379,7 @@ const MiddleContainer = () => {
                                       (variant) =>
                                         variant?._id === cartItem?.variant
                                     ).discount
-                                  ),
-                                
+                                  )
                                 );
                               }}
                             >
@@ -441,7 +450,13 @@ const MiddleContainer = () => {
                       <span>Clear Your Cart</span>
                     </a>
                     <span className="tg-subtotal">
-                      Subtotal: <strong>${saveSubtotalState? Number(saveSubtotalState).toFixed(2): subtotal(cart?.cartItems)}</strong>
+                      Subtotal:{" "}
+                      <strong>
+                        $
+                        {saveSubtotalState
+                          ? Number(saveSubtotalState).toFixed(2)
+                          : subtotal(cart?.cartItems)}
+                      </strong>
                     </span>
                     <div
                       className="tg-btns"
@@ -450,10 +465,92 @@ const MiddleContainer = () => {
                       }}
                     >
                       <a className="tg-btn" href="javascript:void(0);"></a>
-                      <a className="tg-btn" href="javascript:void(0);" onClick={handleCheckOut}>
+                      <a
+                        className="tg-btn"
+                        href="javascript:void(0);"
+                        onClick={handleCheckOut}
+                      >
                         Checkout
                       </a>
                     </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className={`dropdown tg-themedropdown tg-minicartdropdown`}>
+                <a
+                  href="javascript:void(0);"
+                  id="tg-minicart"
+                  className="tg-btnthemedropdown dropdown-toggle"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  data-toggle="dropdown"
+                  onClick={() => {}}
+                >
+                  <i class="fa fa-th" aria-hidden="true"></i>
+                </a>
+                <div
+                  className="dropdown-menu tg-themedropdownmenu"
+                  aria-labelledby="tg-minicart"
+                  style={{
+                    width: "100px",
+                  }}
+                >
+                  <div className="tg-minicartbody" style={{
+                    paddingLeft: '16px'
+                  }}>
+                    <>
+                      <div className="tg-minicarproduct row">
+                        <a
+                          href="javascript:void(0);"
+                          onClick={() => {
+                            navigate("/checkout/orders");
+                          }}
+                        >
+                          All orders
+                        </a>
+                      </div>
+                      <div className="tg-minicarproduct row">
+                        <a
+                          href="javascript:void(0);"
+                          onClick={() => {
+                            navigate("/checkout/ordered");
+                          }}
+                        >
+                          All ordered (wait confirm)
+                        </a>
+                      </div>
+                      <div className="tg-minicarproduct row">
+                        <a
+                          href="javascript:void(0);"
+                          onClick={() => {
+                            navigate("/checkout/packed");
+                          }}
+                        >
+                          All packed
+                        </a>
+                      </div>
+                      <div className="tg-minicarproduct row">
+                        <a
+                          href="javascript:void(0);"
+                          onClick={() => {
+                            navigate("/checkout/delivered");
+                          }}
+                        >
+                          All delivered
+                        </a>
+                      </div>
+                      <div className="tg-minicarproduct row">
+                        <a
+                          href="javascript:void(0);"
+                          onClick={() => {
+                            navigate("/checkout/cancelled");
+                          }}
+                        >
+                          All cancelled
+                        </a>
+                      </div>
+                    </>
                   </div>
                 </div>
               </div>
