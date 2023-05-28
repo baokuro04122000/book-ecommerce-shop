@@ -9,9 +9,11 @@ import InStock from "../../components/Price/InStock";
 import AlsoAvailable from "../../components/Price/AlsoAvailable";
 import RelatedProducts from "./RelatedProduct";
 import { selectIsAuth } from "../../store/authentication/selector";
-import { calDiscount, forceLogin } from "../../helpers/utils";
+import { calDiscount, calRating, forceLogin } from "../../helpers/utils";
 import { toast } from "react-toastify";
 import { actionAddToCart, actionGetCart } from "../../store/cart/action";
+import StarRatings from "react-star-ratings";
+import moment from "moment";
 const ProductDetail = () => {
   const { params } = useParams();
 
@@ -27,7 +29,7 @@ const ProductDetail = () => {
   useEffect(() => {
     dispatch(actionGetProductDetails(params.split("=")[1]));
     return () => {
-      dispatch(setProductDetail(null))
+      dispatch(setProductDetail(null));
     };
   }, [dispatch, params]);
 
@@ -61,8 +63,8 @@ const ProductDetail = () => {
           .catch((err) => {
             toast.error(err?.errors?.message, { autoClose: 5000 });
           });
-      }else{
-        toast.warning('Please choose the variant that you wanna buy!')
+      } else {
+        toast.warning("Please choose the variant that you wanna buy!");
       }
     }
   };
@@ -318,12 +320,10 @@ const ProductDetail = () => {
                   {productDetail?.seller?.info?.name}
                 </a>
               </span>
-              <span class="tg-stars">
-                <span></span>
-              </span>
-              <span class="tg-addreviews">
-                <a href="javascript:void(0);">Add Your Review</a>
-              </span>
+              <StarRatings starEmptyColor="gray" starRatedColor="yellow" rating={calRating(productDetail?.reviews) === 0 ? 4 : calRating(productDetail?.reviews)} /> 
+              <div style={{
+                marginLeft: '10px'
+              }}>{calRating(productDetail?.reviews)}/{productDetail?.reviews?.length}</div>
               <div class="tg-share">
                 <span>Share:</span>
                 <ul class="tg-socialicons">
@@ -440,7 +440,31 @@ const ProductDetail = () => {
                 </div>
                 <div role="tabpanel" class="tg-tab-pane tab-pane" id="review">
                   <div class="tg-description">
-                    <p>coming soon</p>
+                    <div class="spr-reviews">
+                      {productDetail?.reviews?.map((review) => (
+                        <>
+                        <div class="spr-review" style={{
+                          minHeight: '100px',
+                          width: '100%'
+                        }}>
+                          <div class="spr-review-header">
+                            <StarRatings numberOfStars={5} rating={review.rating} starEmptyColor="gray" starRatedColor="yellow"/>
+                            <h3 class="spr-review-header-title">
+                              {review.comment}
+                            </h3>
+                            <span class="spr-review-header-byline">
+                              <strong>{review.user.info.name}</strong> on{" "}
+                              <strong>{moment(review.updatedAt).format('MM/DD/YYYY h:m A')}</strong>
+                            </span>
+                          </div>
+
+                        </div>
+                        
+                        </>
+                      ))}
+
+                      {productDetail?.reviews ? (<></>) : (<span>No review</span>)}
+                    </div>
                   </div>
                 </div>
               </div>

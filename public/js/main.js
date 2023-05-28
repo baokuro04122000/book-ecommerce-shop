@@ -265,4 +265,5 @@ jQuery(document).on('ready', function() {
 	jQuery('em.plus').on('click', function () {
 		jQuery('#quantity1').val(parseInt(jQuery('#quantity1').val(), 10) + 1);
 	});
+
 });

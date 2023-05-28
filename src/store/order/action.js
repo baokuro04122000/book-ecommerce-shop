@@ -1,8 +1,10 @@
 import {
   addDeliveryInfo,
   addOrder,
+  addReviewByUser,
   checkStatusPayment,
   getAllOrderCancelled,
+  getAllOrderCompleted,
   getAllOrderedByUser,
   getAllOrders,
   getAllOrdersPacked,
@@ -127,6 +129,28 @@ export const actionGetAllCancelled =async () => {
   try {
     const { data } = await getAllOrderCancelled()
     return data.data
+  } catch (error) {
+    console.log(error);
+    throw error.response?.data;
+  }
+};
+
+export const actionGetAllCompleted =async (page, limit) => {
+  try {
+    const { data } = await getAllOrderCompleted(page, limit)
+    console.log('data:', data)
+    return data.data
+  } catch (error) {
+    console.log(error);
+    throw error.response?.data;
+  }
+};
+
+export const actionAddReview =async (body) => {
+  try {
+    const { data } = await addReviewByUser(body)
+    console.log('test::', data)
+    return data.message
   } catch (error) {
     console.log(error);
     throw error.response?.data;

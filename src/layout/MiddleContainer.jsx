@@ -544,6 +544,16 @@ const MiddleContainer = () => {
                         <a
                           href="javascript:void(0);"
                           onClick={() => {
+                            navigate("/checkout/completed");
+                          }}
+                        >
+                          All completed
+                        </a>
+                      </div>
+                      <div className="tg-minicarproduct row">
+                        <a
+                          href="javascript:void(0);"
+                          onClick={() => {
                             navigate("/checkout/cancelled");
                           }}
                         >

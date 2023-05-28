@@ -320,51 +320,7 @@ const Checkout = () => {
         paymentType: "paypal",
         items: items,
       }).then((data) => {
-        openInNewTab(data.data.link);
-        setTimeout(() => {
-          actionCheckStatusPayment(data.data.payId)
-            .then((res) => {
-              if (res.data.paymentStatus === "cancelled") {
-                toast.warning(
-                  "Your order is canceled, because payment had been failed!",
-                  { autoClose: 5000 }
-                );
-                navigate("/");
-              }
-              if (res.data.paymentStatus === "completed") {
-                toast.success(
-                  "Thank for your order!, web had been send a notify to your email!",
-                  { autoClose: 5000 }
-                );
-                navigate("/");
-              }
-              if (res.data.paymentStatus === "pending") {
-                toast.warning(
-                  "Your order is canceled, because payment processing is timeout!",
-                  { autoClose: 5000 }
-                );
-                navigate("/");
-              }
-            })
-            .catch((err) =>
-              toast.error(err?.errors?.message, { autoClose: 5000 })
-            );
-        }, 120000);
-        setTimeout(() => {
-          actionCheckStatusPayment(data.data.payId)
-            .then((res) => {
-              if (res.data.paymentStatus === "completed") {
-                toast.success(
-                  "Thank for your order!, web had been send a notify to your email!",
-                  { autoClose: 5000 }
-                );
-                navigate("/");
-              }
-            })
-            .catch((err) =>
-              toast.error(err?.errors?.message, { autoClose: 5000 })
-            );
-        }, 60000);
+        window.location.href=data.data.link;
       });
     } else {
       actionAddOrder({

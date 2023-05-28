@@ -12,6 +12,8 @@ import Order from '../pages/Order';
 import Packed from '../pages/Order/Packed';
 import Ordered from '../pages/Order/Ordered';
 import Cancelled from '../pages/Order/Cancelled';
+import Completed from '../pages/Order/Completed';
+import Profile from '../pages/Profile/Profile';
 const unauthRoutes = {
   path: '/',
   element: <Layout/>,
@@ -53,6 +55,14 @@ const checkoutRoutes = {
     {
       path: 'cancelled',
       element: <Cancelled />
+    },
+    {
+      path: 'completed',
+      element: <Completed />
+    },
+    {
+      path: 'profile',
+      element: <Profile />
     },
   ]
 };

@@ -157,7 +157,7 @@ const CategoryTable = ({ orders }) => {
                 <div>{item.paymentStatus}</div>
               </td>
               <td className="hover:bg-gray-200 p-2 text-center">
-                ${item.totalPaid}
+              ${Number(item.totalPaid).toFixed(2)}
               </td>
               <td className="hover:bg-gray-200 p-2 text-center">
                 {item.shippingCost === 0 ? "Free" : "$" + item.shippingCost}

@@ -15,3 +15,7 @@ export const logout = async (body) => {
 export const registerSeller = async () => {
   return await baseAxios.get('/auth/seller/register')
 }
+
+export const getProfile = async () => {
+  return await baseAxios.get('/user/profile')
+}

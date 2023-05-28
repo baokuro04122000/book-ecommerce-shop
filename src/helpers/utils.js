@@ -43,3 +43,14 @@ export const calPriceItemCart = (cartItem) => {
   const variant = cartItem?.product.variants.find(v => v._id === cartItem.variant)
   return Number((calDiscount(variant.price, variant.discount)*cartItem.quantity).toFixed(2))
 }
+
+export const calRating = (reviews) => {
+  if(reviews?.length > 0){
+    let totalRating = 0;
+    reviews.forEach(review => {
+      totalRating += Number(review.rating)
+    })
+    return Number(totalRating/reviews.length)
+  }
+  return 0
+}

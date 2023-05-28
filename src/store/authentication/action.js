@@ -4,6 +4,7 @@ import {
   setAuthUser,
 } from "./slice";
 import { 
+  getProfile,
   googleLogin,
   login,
   logout,
@@ -50,6 +51,15 @@ export const actionRegisterSeller = async ()=> {
   try {
     const {data} = await registerSeller()
     return data.message
+  } catch (error) {
+    throw error.response?.data;
+  }
+}
+
+export const actionGetProfile = async ()=> {
+  try {
+    const {data} = await getProfile()
+    return data.data
   } catch (error) {
     throw error.response?.data;
   }

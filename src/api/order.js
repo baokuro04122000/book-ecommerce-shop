@@ -43,3 +43,11 @@ export const getAllOrderedByUser = async () => {
 export const getAllOrderCancelled = async () => {
   return await baseAxios.get('/order/all-cancelled')
 }
+
+export const getAllOrderCompleted = async (page, limit) => {
+  return await baseAxios.get(`/order/all-done?page=${page}&limit=${limit}`)
+}
+
+export const addReviewByUser = async (body) => {
+  return await baseAxios.post('/product/user/review', body);
+}

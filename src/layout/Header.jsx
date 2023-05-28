@@ -187,6 +187,17 @@ const Header = () => {
                         ): (
                           <></>
                         )}
+                         <li
+                          className="custom-search-list"
+                          style={{
+                            justifyContent: "center",
+                          }}
+                          onClick={() => {
+                            navigate('/checkout/profile')
+                          }}
+                        >
+                          <a href="javascript:void(0);">Profile</a>
+                        </li>
                         <li
                           className="custom-search-list"
                           style={{
